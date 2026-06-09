@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class BaseModel(models.Model):
+class ModeloBase(models.Model):
 
     Estado = models.BooleanField(db_column='Estado', null=False, default=True)
     Fecha_Creacion = models.DateTimeField(db_column='Fecha_Creacion', null=False, auto_now_add=True)
