@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Aplicaciones propias
     "APLICACION_RESERVAS",
+    "APLICACION_USUARIOS",
     # Terceros
     "rest_framework",
     "corsheaders",
