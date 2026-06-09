@@ -106,7 +106,7 @@ Ejemplo:
 
 ```env
 SECRET_KEY=
-DEBUG=True
+DEBUG=
 DB_NAME=
 DB_USER=
 DB_PASSWORD=
