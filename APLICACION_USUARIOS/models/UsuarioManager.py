@@ -1,17 +1,22 @@
 from django.contrib.auth.base_user import BaseUserManager
 
+from APLICACION_USUARIOS.models import ModeloTipoIdentificacion
+
 class UsuarioManager(BaseUserManager):
 
-    def CreateUser(self, Correo, Password=None, **ExtraFields):
+    def create_user(self, Correo, password=None, **ExtraFields):
         if not Correo:
             raise ValueError("El Correo es obligatorio")
+        TipoIdentificacionId = ExtraFields.get("Tipo_Identificacion")
+        TipoIdentificacion = ModeloTipoIdentificacion.objects.get(pk=TipoIdentificacionId)
+        ExtraFields["Tipo_Identificacion"] = TipoIdentificacion
         Correo = self.normalize_email(Correo)
         Usuario = self.model(Correo=Correo, **ExtraFields)
-        Usuario.set_Password(Password)
+        Usuario.set_password(password)
         Usuario.save(using=self._db)
         return Usuario
 
-    def CreateSuperuser(self, Correo, Password, **ExtraFields):
+    def create_superuser(self, Correo, password, **ExtraFields):
         ExtraFields.setdefault("is_staff", True)
         ExtraFields.setdefault("is_superuser", True)
-        return self.CreateUser(Correo, Password, **ExtraFields)
+        return self.create_user(Correo, password, **ExtraFields)

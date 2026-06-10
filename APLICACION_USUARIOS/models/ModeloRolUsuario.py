@@ -15,3 +15,11 @@ class ModeloRolUsuario(ModeloBase):
             "Usuario",
             "Rol"
         )
+        verbose_name = "Roles Usuario"
+        verbose_name_plural = "Roles Usuarios"
+        constraints = [
+        models.UniqueConstraint(
+            fields=["Usuario", "Rol"],
+            name="UniqueUsuarioRol"
+        )
+    ]
