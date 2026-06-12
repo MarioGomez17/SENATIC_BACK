@@ -7,9 +7,9 @@ class UsuarioManager(BaseUserManager):
     def create_user(self, Correo, password=None, **ExtraFields):
         if not Correo:
             raise ValueError("El Correo es obligatorio")
-        TipoIdentificacionId = ExtraFields.get("Tipo_Identificacion")
+        TipoIdentificacionId = ExtraFields.get("TipoIdentificacion")
         TipoIdentificacion = ModeloTipoIdentificacion.objects.get(pk=TipoIdentificacionId)
-        ExtraFields["Tipo_Identificacion"] = TipoIdentificacion
+        ExtraFields["TipoIdentificacion"] = TipoIdentificacion
         Correo = self.normalize_email(Correo)
         Usuario = self.model(Correo=Correo, **ExtraFields)
         Usuario.set_password(password)

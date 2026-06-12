@@ -45,7 +45,7 @@ class UsuarioAdmin(UserAdmin):
                 "Apellido",
                 "Telefono",
                 "NumeroIdentificacion",
-                "Tipo_Identificacion"
+                "TipoIdentificacion"
             )
         }),
 
@@ -62,16 +62,16 @@ class UsuarioAdmin(UserAdmin):
         ("Fechas", {
             "fields": (
                 "last_login",
-                "Fecha_Creacion",
-                "Fecha_Actualizacion"
+                "FechaCreacion",
+                "FechaActualizacion"
             )
         })
     )
 
     readonly_fields = (
-        "Fecha_Creacion",
-        "Fecha_Actualizacion",
-        "last_login"
+        "last_login",
+        "FechaCreacion",
+        "FechaActualizacion"
     )
 
     inlines = [

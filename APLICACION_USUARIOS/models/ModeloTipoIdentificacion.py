@@ -5,9 +5,9 @@ from .ModeloBase import ModeloBase
 
 class ModeloTipoIdentificacion(ModeloBase):
 
-    Id = models.AutoField(db_column='Id_TipoIdentificacion', primary_key=True, null=False)
-    Nombre = models.CharField(db_column='Nombre_TipoIdentificacion', max_length=100, unique=True)
-    Abreviatura = models.CharField(db_column='Abreviatura_TipoIdentificacion', max_length=10, unique=True)
+    Id = models.AutoField(db_column='Id', primary_key=True, null=False)
+    Nombre = models.CharField(db_column='Nombre', max_length=100, unique=True)
+    Abreviatura = models.CharField(db_column='Abreviatura', max_length=10, unique=True)
 
     class Meta:
         managed = True

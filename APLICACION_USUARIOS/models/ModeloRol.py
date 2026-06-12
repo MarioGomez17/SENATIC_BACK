@@ -5,8 +5,8 @@ from .ModeloBase import ModeloBase
 
 class ModeloRol(ModeloBase):
 
-    Id = models.AutoField(db_column='Id_Rol', primary_key=True, null=False)
-    Nombre = models.CharField(db_column='Nombre_Rol', max_length=100, unique=True)
+    Id = models.AutoField(db_column='Id', primary_key=True, null=False)
+    Nombre = models.CharField(db_column='Nombre', max_length=100, unique=True)
 
     class Meta:
         db_table = "Rol"
