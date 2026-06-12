@@ -74,6 +74,27 @@ class UsuarioAdmin(UserAdmin):
         "FechaActualizacion"
     )
 
+    add_fieldsets = (
+            (
+                None,
+                {
+                    "classes": ("wide",),
+                    "fields": (
+                        "Correo",
+                        "Nombre",
+                        "Apellido",
+                        "Telefono",
+                        "NumeroIdentificacion",
+                        "TipoIdentificacion",
+                        "password1",
+                        "password2",
+                        "is_staff",
+                        "is_superuser",
+                    ),
+                },
+            ),
+        )
+
     inlines = [
         RolUsuarioInline
     ]
