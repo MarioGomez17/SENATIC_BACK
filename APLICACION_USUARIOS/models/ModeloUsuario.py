@@ -7,13 +7,13 @@ from .UsuarioManager import UsuarioManager
 
 class ModeloUsuario(AbstractBaseUser, PermissionsMixin, ModeloBase):
 
-    Id = models.AutoField(db_column='Id_Usuario', primary_key=True, null=False)
-    Nombre = models.CharField(db_column='Nombre_Usuario', max_length=100)
-    Apellido = models.CharField(db_column='Apellido_Usuario', max_length=100)
-    Telefono = models.CharField(db_column='Telefono_Usuario', max_length=20)
-    NumeroIdentificacion = models.CharField(db_column='NumeroIdentificacion_Usuario', max_length=20, unique=True)
-    Tipo_Identificacion = models.ForeignKey(ModeloTipoIdentificacion, on_delete=models.PROTECT, db_column='Tipo_Identificacion_Usuario')
-    Correo = models.EmailField(db_column='Correo_Usuario', max_length=100, unique=True)
+    Id = models.AutoField(db_column='Id', primary_key=True, null=False)
+    Nombre = models.CharField(db_column='Nombre', max_length=100)
+    Apellido = models.CharField(db_column='Apellido', max_length=100)
+    Telefono = models.CharField(db_column='Telefono', max_length=20)
+    NumeroIdentificacion = models.CharField(db_column='NumeroIdentificacion', max_length=20, unique=True)
+    TipoIdentificacion = models.ForeignKey(ModeloTipoIdentificacion, on_delete=models.PROTECT, db_column='TipoIdentificacion')
+    Correo = models.EmailField(db_column='Correo', max_length=100, unique=True)
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = "Correo"
@@ -23,7 +23,7 @@ class ModeloUsuario(AbstractBaseUser, PermissionsMixin, ModeloBase):
         "Apellido",
         "Telefono",
         "NumeroIdentificacion",
-        "Tipo_Identificacion"
+        "TipoIdentificacion"
     ]
 
     class Meta:
