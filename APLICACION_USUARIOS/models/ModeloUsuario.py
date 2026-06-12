@@ -34,4 +34,4 @@ class ModeloUsuario(AbstractBaseUser, PermissionsMixin, ModeloBase):
     def __str__(self):
         return self.Nombre
 
-    Objects = UsuarioManager()
+    objects = UsuarioManager()
