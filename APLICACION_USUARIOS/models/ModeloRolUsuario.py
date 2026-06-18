@@ -6,6 +6,7 @@ from .ModeloRol import ModeloRol
 
 class ModeloRolUsuario(ModeloBase):
 
+    Id = models.AutoField(db_column='Id', primary_key=True, null=False)
     Usuario = models.ForeignKey(ModeloUsuario, on_delete=models.CASCADE, db_column='Usuario', related_name="RolesUsuario")
     Rol = models.ForeignKey(ModeloRol, on_delete=models.CASCADE, db_column='Rol', related_name="UsuariosRol")
 
