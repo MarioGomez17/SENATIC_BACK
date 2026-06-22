@@ -8,7 +8,6 @@ class SerializadorActualizacionTipoIdentificacion(serializers.ModelSerializer):
         model = ModeloTipoIdentificacion
         
         fields = (
-            "Id",
             "Nombre",
             "Abreviatura",
         )

@@ -8,6 +8,5 @@ class SerializadorActualizacionRol(serializers.ModelSerializer):
         model = ModeloRol
 
         fields = (
-            "Id",
             "Nombre",
         )
