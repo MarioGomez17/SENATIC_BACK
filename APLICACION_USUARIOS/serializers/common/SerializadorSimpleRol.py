@@ -11,7 +11,5 @@ class SerializadorSimpleRol(serializers.ModelSerializer):
         fields = (
             "Id",
             "Nombre",
-            "Estado",
-            "FechaCreacion",
-            "FechaActualizacion"
+            "Estado"
         )
