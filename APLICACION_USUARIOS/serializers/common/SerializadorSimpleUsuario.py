@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from APLICACION_USUARIOS.models import ModeloUsuario
-from APLICACION_USUARIOS.serializers.read.TipoIdentificacion import SerializadorDetalleTipoIdentificacion
+from .SerializadorTipoIdentificacionResumen import SerializadorTipoIdentificacionResumen
 
 class SerializadorSimpleUsuario(serializers.ModelSerializer):
 
@@ -9,7 +9,7 @@ class SerializadorSimpleUsuario(serializers.ModelSerializer):
         return f"{obj.Nombre} {obj.Apellido}"
 
     NombreCompleto = serializers.SerializerMethodField()
-    TipoIdentificacion = (SerializadorDetalleTipoIdentificacion())
+    TipoIdentificacion = SerializadorTipoIdentificacionResumen()
 
     class Meta:
 
@@ -25,6 +25,4 @@ class SerializadorSimpleUsuario(serializers.ModelSerializer):
             "NumeroIdentificacion",
             "TipoIdentificacion",
             "Estado",
-            "FechaCreacion",
-            "FechaActualizacion"
         )
