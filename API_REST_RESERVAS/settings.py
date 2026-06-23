@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     # Terceros
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -100,5 +101,13 @@ AUTH_USER_MODEL = "APLICACION_USUARIOS.ModeloUsuario"
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
-    ]
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API Sistema de Reservas",
+    "DESCRIPTION": "Documentación de la API del sistema de reservas",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
