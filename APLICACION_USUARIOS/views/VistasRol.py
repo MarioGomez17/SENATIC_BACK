@@ -2,8 +2,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 
 from APLICACION_USUARIOS.models import ModeloRol
+from APLICACION_USUARIOS.serializers.common import SerializadorVacio
 from APLICACION_USUARIOS.services.ServicioRol import ServicioRol
 from APLICACION_USUARIOS.serializers.read.Rol import SerializadorListaRol, SerializadorDetalleRol
 from APLICACION_USUARIOS.serializers.write.Rol import SerializadorCrearRol, SerializadorActualizarRol
@@ -26,6 +29,7 @@ class VistasRol(
             return SerializadorCrearRol
         if self.action == "update":
             return SerializadorActualizarRol
+        return SerializadorVacio
 
     queryset = ModeloRol.objects.all()
 
@@ -68,15 +72,18 @@ class VistasRol(
     # ===========================================
     # ACTIVAR (PATCH /rol/{id}/)
     # ===========================================
-    def partial_update(self, request, pk=None):
+    @extend_schema(request=None, responses={200: None})
+    @action(detail=True, methods=["patch"])
+    def Activar(self, request, pk=None):
         Rol = ServicioRol.ObtenerRolPorId(pk)
         ServicioRol.ActivarRol(Rol)
-        return Response({"Mensaje" : "Rol Activado"}, status=status.HTTP_200_OK)
+        return Response({"Mensaje": "Rol Activado"}, status=status.HTTP_200_OK)
 
     # ===========================================
     # ELIMINAR (DELETE /rol/{id}/)
     # ===========================================
+    @extend_schema(request=None, responses={200: None})
     def destroy(self, request, pk=None):
         Rol = ServicioRol.ObtenerRolPorId(pk)
         ServicioRol.EliminarRol(Rol)
-        return Response({"Mensaje" : "Rol Eliminado"}, status=status.HTTP_200_OK)
+        return Response({"Mensaje": "Rol Eliminado"}, status=status.HTTP_200_OK)

@@ -2,8 +2,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 
 from APLICACION_USUARIOS.models import ModeloTipoIdentificacion
+from APLICACION_USUARIOS.serializers.common import SerializadorVacio
 from APLICACION_USUARIOS.services.ServicioTipoIdentificacion import ServicioTipoIdentificacion
 from APLICACION_USUARIOS.serializers.read.TipoIdentificacion import SerializadorListaTipoIdentificacion, SerializadorDetalleTipoIdentificacion
 from APLICACION_USUARIOS.serializers.write.TipoIdentificacion import SerializadorCrearTipoIdentificacion, SerializadorActualizarTipoIdentificacion
@@ -26,7 +29,8 @@ class VistasTipoIdentificacion(
             return SerializadorCrearTipoIdentificacion
         if self.action == "update":
             return SerializadorActualizarTipoIdentificacion    
-    
+        return SerializadorVacio
+
     queryset = ModeloTipoIdentificacion.objects.all()
 
     #===========================================
@@ -68,15 +72,18 @@ class VistasTipoIdentificacion(
     #===========================================
     #ACTIVAR (PATCH /rol/{id}/)
     #===========================================
-    def partial_update(self, request, pk=None):
+    @extend_schema(request=None, responses={200: None})
+    @action(detail=True, methods=["patch"])
+    def Activar(self, request, pk=None):
         TipoIdentificacion = ServicioTipoIdentificacion.ObtenerTipoIdentificacionPorId(pk)
         ServicioTipoIdentificacion.ActivarTipoIdentificacion(TipoIdentificacion)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"Mensaje": "Rol Activado"}, status=status.HTTP_200_OK)
 
     #===========================================
     #ELIMINAR (DELETE /rol/{id}/)
     #===========================================
+    @extend_schema(request=None, responses={200: None})
     def destroy(self, request, pk=None):
         TipoIdentificacion = ServicioTipoIdentificacion.ObtenerTipoIdentificacionPorId(pk)
         ServicioTipoIdentificacion.EliminarTipoIdentificacion(TipoIdentificacion)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"Mensaje": "Rol Eliminado"}, status=status.HTTP_200_OK)
