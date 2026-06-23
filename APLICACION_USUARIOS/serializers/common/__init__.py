@@ -3,3 +3,4 @@ from .SerializadorSimpleRol import SerializadorSimpleRol
 from .SerializadorSimpleUsuario import SerializadorSimpleUsuario
 from .SerializadorTipoIdentificacionResumen import SerializadorTipoIdentificacionResumen
 from .SerializadorUsuarioResumenRol import SerializadorUsuarioResumenRol
+from .SerializadorVacio import SerializadorVacio
