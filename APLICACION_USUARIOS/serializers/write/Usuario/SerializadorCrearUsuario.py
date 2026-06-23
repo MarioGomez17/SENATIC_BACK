@@ -8,7 +8,7 @@ class SerializadorCrearUsuario(serializers.ModelSerializer):
     Password = serializers.CharField(write_only=True)
 
     Roles = serializers.PrimaryKeyRelatedField(
-        queryset=ModeloRol.objects.filter(estado=True),
+        queryset=ModeloRol.objects.filter(Estado=True),
         many=True,
         write_only=True
     )
