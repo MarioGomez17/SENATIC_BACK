@@ -4,11 +4,14 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 
 from APLICACION_USUARIOS.models import ModeloUsuario
+from APLICACION_USUARIOS.permissions import EsAdministradorEmpresa, EsSuperAdministrador, EsUsuario, PermisosPersonalizados
 from APLICACION_USUARIOS.serializers.common import SerializadorVacio
 from APLICACION_USUARIOS.services.ServicioUsuario import ServicioUsuario
-from APLICACION_USUARIOS.serializers.read.Usuario import SerializadorListaUsuario, SerializadorDetalleUsuario
+from APLICACION_USUARIOS.serializers.read.Usuario import SerializadorDetalleUsuarioPropio, SerializadorListaUsuario, SerializadorDetalleUsuario
 from APLICACION_USUARIOS.serializers.write.Usuario import SerializadorCrearUsuario, SerializadorActualizarUsuario
 
 class VistasUsuario(
@@ -19,6 +22,8 @@ class VistasUsuario(
     mixins.DestroyModelMixin,
     GenericViewSet
     ):
+
+    permission_classes=[IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -31,10 +36,21 @@ class VistasUsuario(
             return SerializadorActualizarUsuario
         return SerializadorVacio
 
+    def get_permissions(self):
+        if self.action in ["list", "retrieve", "create", "update", "destroy"]:
+            permission_classes = [EsSuperAdministrador]
+        elif self.action == "Activar":
+            permission_classes = [EsSuperAdministrador]
+        elif self.action == "Obtener":
+            permission_classes = [IsAuthenticated, PermisosPersonalizados]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
     queryset = ModeloUsuario.objects.all()
 
     # ===========================================
-    # LISTAR (GET /rol/)
+    # LISTAR (GET /usuario/)
     # ===========================================
     def list(self, request):
         Usuarios = ServicioUsuario.ObtenerUsuarios()
@@ -42,7 +58,7 @@ class VistasUsuario(
         return Response(Serializador.data, status=status.HTTP_200_OK)
 
     # ===========================================
-    # OBTENER (GET /rol/{id}/)
+    # OBTENER (GET /usuario/{id}/)
     # ===========================================
     def retrieve(self, request, pk=None):
         Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
@@ -50,7 +66,7 @@ class VistasUsuario(
         return Response(Serializador.data, status=status.HTTP_200_OK)
 
     # ===========================================
-    # CREAR (POST /rol/)
+    # CREAR (POST /usuario/)
     # ===========================================
     def create(self, request):
         Serializador = SerializadorCrearUsuario(data=request.data)
@@ -61,7 +77,7 @@ class VistasUsuario(
         return Response(SerializadorRespuesta.data, status=status.HTTP_201_CREATED)
 
     # ===========================================
-    # ACTUALIZAR COMPLETO (PUT /rol/{id}/)
+    # ACTUALIZAR COMPLETO (PUT /usuario/{id}/)
     # ===========================================
     def update(self, request, pk=None):
         Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
@@ -71,20 +87,31 @@ class VistasUsuario(
         return Response(SerializadorDetalleUsuario(Usuario).data, status=status.HTTP_200_OK)
 
     # ===========================================
-    # ACTIVAR (PATCH /rol/{id}/)
+    # ACTIVAR (PATCH /usuario/{id}/)
     # ===========================================
     @extend_schema(request=None, responses={200: None})
-    @action(detail=True, methods=["patch"])
+    @action(detail=True, methods=["patch"], permission_classes = [EsSuperAdministrador])
     def Activar(self, request, pk=None):
         Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
         ServicioUsuario.ActivarUsuario(Usuario)
-        return Response({"Mensaje": "Rol Activado"}, status=status.HTTP_200_OK)
+        return Response({"Mensaje": "Usuario"}, status=status.HTTP_200_OK)
 
     # ===========================================
-    # ELIMINAR (DELETE /rol/{id}/)
+    # ELIMINAR (DELETE /usuario/{id}/)
     # ===========================================
     @extend_schema(request=None, responses={200: None})
     def destroy(self, request, pk=None):
         Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
         ServicioUsuario.EliminarUsuario(Usuario)
-        return Response({"Mensaje": "Rol Eliminado"}, status=status.HTTP_200_OK)
+        return Response({"Mensaje": "Usuario Eliminado"}, status=status.HTTP_200_OK)
+    
+    # ===========================================
+    # OBTENER (GET /usuario/{id}/)
+    # ===========================================
+    @action(detail=True, methods=["get"], serializer_class=SerializadorDetalleUsuarioPropio)
+    def Obtener(self, request, pk=None):
+        Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
+        self.check_object_permissions(request, Usuario)
+        Serializador = SerializadorDetalleUsuarioPropio(Usuario)
+        return Response(Serializador.data, status=status.HTTP_200_OK)
+    

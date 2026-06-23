@@ -4,8 +4,10 @@ from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from APLICACION_USUARIOS.models import ModeloRol
+from APLICACION_USUARIOS.permissions import EsSuperAdministrador
 from APLICACION_USUARIOS.serializers.common import SerializadorVacio
 from APLICACION_USUARIOS.services.ServicioRol import ServicioRol
 from APLICACION_USUARIOS.serializers.read.Rol import SerializadorListaRol, SerializadorDetalleRol
@@ -19,6 +21,8 @@ class VistasRol(
     mixins.DestroyModelMixin,
     GenericViewSet
     ):
+
+    permission_classes = [EsSuperAdministrador]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -34,7 +38,7 @@ class VistasRol(
     queryset = ModeloRol.objects.all()
 
     # ===========================================
-    # LISTAR (GET /rol/)
+    # LISTAR (GET /Rol/)
     # ===========================================
     def list(self, request):
         Roles = ServicioRol.ObtenerRoles()
@@ -42,7 +46,7 @@ class VistasRol(
         return Response(Serializador.data, status=status.HTTP_200_OK)
     
     # ===========================================
-    # OBTENER (GET /rol/{id}/)
+    # OBTENER (GET /Rol/{id}/)
     # ===========================================
     def retrieve(self, request, pk=None):
         Rol = ServicioRol.ObtenerRolPorId(pk)
@@ -50,7 +54,7 @@ class VistasRol(
         return Response(Serializador.data, status=status.HTTP_200_OK)
     
     # ===========================================
-    # CREAR (POST /rol/)
+    # CREAR (POST /Rol/)
     # ===========================================
     def create(self, request):
         Serializador = SerializadorCrearRol(data=request.data)
@@ -60,7 +64,7 @@ class VistasRol(
         return Response(SerializadorRespuesta.data, status=status.HTTP_201_CREATED)
 
     # ===========================================
-    # ACTUALIZAR COMPLETO (PUT /rol/{id}/)
+    # ACTUALIZAR COMPLETO (PUT /Rol/{id}/)
     # ===========================================
     def update(self, request, pk=None):
         Rol = ServicioRol.ObtenerRolPorId(pk)
@@ -70,7 +74,7 @@ class VistasRol(
         return Response(SerializadorDetalleRol(Rol).data, status=status.HTTP_200_OK)
 
     # ===========================================
-    # ACTIVAR (PATCH /rol/{id}/)
+    # ACTIVAR (PATCH /Rol/{id}/)
     # ===========================================
     @extend_schema(request=None, responses={200: None})
     @action(detail=True, methods=["patch"])
@@ -80,7 +84,7 @@ class VistasRol(
         return Response({"Mensaje": "Rol Activado"}, status=status.HTTP_200_OK)
 
     # ===========================================
-    # ELIMINAR (DELETE /rol/{id}/)
+    # ELIMINAR (DELETE /Rol/{id}/)
     # ===========================================
     @extend_schema(request=None, responses={200: None})
     def destroy(self, request, pk=None):
