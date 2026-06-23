@@ -1,11 +1,11 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 
 from APLICACION_USUARIOS.models import ModeloUsuario
-from APLICACION_USUARIOS.serializers.read.TipoIdentificacion import SerializadorDetalleTipoIdentificacion
-from APLICACION_USUARIOS.serializers.read.Rol import SerializadorDetalleRol
 
 class SerializadorUsuarioResumenRol(serializers.ModelSerializer):
 
+    @extend_schema_field(str)
     def get_NombreCompleto(self, obj):
         return f"{obj.Nombre} {obj.Apellido}"
 
