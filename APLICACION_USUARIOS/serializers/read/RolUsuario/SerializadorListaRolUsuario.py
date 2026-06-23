@@ -1,9 +1,11 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 
 from APLICACION_USUARIOS.models import ModeloRolUsuario
 
 class SerializadorListaRolUsuario(serializers.ModelSerializer):
 
+    @extend_schema_field(str)
     def get_Usuario(self,obj):
             return (f"{obj.Usuario.Nombre} "f"{obj.Usuario.Apellido}")
 

@@ -7,7 +7,7 @@ class ServicioRol:
         return ModeloRol.objects.all()
 
     @staticmethod
-    def obtenerRolPorId(RolId):
+    def ObtenerRolPorId(RolId):
         return ModeloRol.objects.get(Id=RolId)
 
     @staticmethod

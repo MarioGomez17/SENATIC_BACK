@@ -1,8 +1,25 @@
 from django.db import transaction
 
-from APLICACION_USUARIOS.models import ModeloRolUsuario, ModeloRol
+from APLICACION_USUARIOS.models import ModeloRolUsuario
 
 class ServicioRolUsuario:
+
+    @staticmethod
+    def ObtenerRolesUsuarios():
+        return ModeloRolUsuario.objects.all()
+
+    @staticmethod
+    def ObtenerRolUsuarioPorId(RolUsuarioId):
+        return ModeloRolUsuario.objects.get(Id=RolUsuarioId)
+
+    @staticmethod
+    def ObtenerRolesPorUsuario(Usuario):
+        return ModeloRolUsuario.objects.filter(Usuario=Usuario)
+
+
+    @staticmethod
+    def ObtenerUsuariosPorRol(Rol):
+        return ModeloRolUsuario.objects.filter(Rol=Rol)
 
     @staticmethod
     @transaction.atomic
@@ -13,4 +30,4 @@ class ServicioRolUsuario:
 
     @staticmethod
     def RemoverRoles(Usuario, Roles):
-        ModeloRolUsuario.objects.filter(Usuario=Usuario, rol__in=Roles).delete()
+        ModeloRolUsuario.objects.filter(Usuario=Usuario, Rol__in=Roles).delete()

@@ -7,7 +7,7 @@ class ServicioTipoIdentificacion:
         return ModeloTipoIdentificacion.objects.all()
 
     @staticmethod
-    def obtenerTipoIdentificacionPorId(TipoIdentificacionId):
+    def ObtenerTipoIdentificacionPorId(TipoIdentificacionId):
         return ModeloTipoIdentificacion.objects.get(Id=TipoIdentificacionId)
 
     @staticmethod

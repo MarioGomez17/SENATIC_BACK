@@ -2,8 +2,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import action
 
 from APLICACION_USUARIOS.models import ModeloUsuario
+from APLICACION_USUARIOS.serializers.common import SerializadorVacio
 from APLICACION_USUARIOS.services.ServicioUsuario import ServicioUsuario
 from APLICACION_USUARIOS.serializers.read.Usuario import SerializadorListaUsuario, SerializadorDetalleUsuario
 from APLICACION_USUARIOS.serializers.write.Usuario import SerializadorCrearUsuario, SerializadorActualizarUsuario
@@ -26,6 +29,7 @@ class VistasUsuario(
             return SerializadorCrearUsuario
         if self.action == "update":
             return SerializadorActualizarUsuario
+        return SerializadorVacio
 
     queryset = ModeloUsuario.objects.all()
 
@@ -69,15 +73,18 @@ class VistasUsuario(
     # ===========================================
     # ACTIVAR (PATCH /rol/{id}/)
     # ===========================================
-    def partial_update(self, request, pk=None):
+    @extend_schema(request=None, responses={200: None})
+    @action(detail=True, methods=["patch"])
+    def Activar(self, request, pk=None):
         Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
         ServicioUsuario.ActivarUsuario(Usuario)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"Mensaje": "Rol Activado"}, status=status.HTTP_200_OK)
 
     # ===========================================
     # ELIMINAR (DELETE /rol/{id}/)
     # ===========================================
+    @extend_schema(request=None, responses={200: None})
     def destroy(self, request, pk=None):
         Usuario = ServicioUsuario.ObtenerUsuarioPorId(pk)
         ServicioUsuario.EliminarUsuario(Usuario)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"Mensaje": "Rol Eliminado"}, status=status.HTTP_200_OK)
