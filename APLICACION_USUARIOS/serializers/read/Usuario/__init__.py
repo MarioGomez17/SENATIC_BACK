@@ -1,2 +1,3 @@
 from .SerializadorDetalleUsuario import SerializadorDetalleUsuario
 from .SerializadorListaUsuario import SerializadorListaUsuario
+from .SerializadorDetalleUsuarioPropio import SerializadorDetalleUsuarioPropio

@@ -6,6 +6,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.decorators import action
 
 from APLICACION_USUARIOS.models import ModeloTipoIdentificacion
+from APLICACION_USUARIOS.permissions import EsSuperAdministrador
 from APLICACION_USUARIOS.serializers.common import SerializadorVacio
 from APLICACION_USUARIOS.services.ServicioTipoIdentificacion import ServicioTipoIdentificacion
 from APLICACION_USUARIOS.serializers.read.TipoIdentificacion import SerializadorListaTipoIdentificacion, SerializadorDetalleTipoIdentificacion
@@ -19,6 +20,8 @@ class VistasTipoIdentificacion(
     mixins.DestroyModelMixin,
     GenericViewSet
     ):
+
+    permission_classes = [EsSuperAdministrador]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -34,7 +37,7 @@ class VistasTipoIdentificacion(
     queryset = ModeloTipoIdentificacion.objects.all()
 
     #===========================================
-    #LISTAR (GET /rol/)
+    #LISTAR (GET /TipoIdentidicacion/)
     #===========================================
     def list(self, request):
         TipoIdentificaciones = ServicioTipoIdentificacion.ObtenerTiposIdentificaciones()
@@ -42,7 +45,7 @@ class VistasTipoIdentificacion(
         return Response(Serializador.data, status=status.HTTP_200_OK)
 
     #===========================================
-    #OBTENER (GET /rol/{id}/)
+    #OBTENER (GET /TipoIdentidicacion/{id}/)
     #===========================================
     def retrieve(self, request, pk=None):
         TipoIdentificacion = ServicioTipoIdentificacion.ObtenerTipoIdentificacionPorId(pk)
@@ -50,7 +53,7 @@ class VistasTipoIdentificacion(
         return Response(Serializador.data, status=status.HTTP_200_OK)
 
     #===========================================
-    #CREAR (POST /rol/)
+    #CREAR (POST /TipoIdentidicacion/)
     #===========================================
     def create(self, request):
         Serializador = SerializadorCrearTipoIdentificacion(data=request.data)
@@ -60,7 +63,7 @@ class VistasTipoIdentificacion(
         return Response(SerializadorRespuesta.data, status=status.HTTP_201_CREATED)
 
     #===========================================
-    #ACTUALIZAR COMPLETO (PUT /rol/{id}/)
+    #ACTUALIZAR COMPLETO (PUT /TipoIdentidicacion/{id}/)
     #===========================================
     def update(self, request, pk=None):
         TipoIdentificacion = ServicioTipoIdentificacion.ObtenerTipoIdentificacionPorId(pk)
@@ -70,20 +73,20 @@ class VistasTipoIdentificacion(
         return Response(SerializadorDetalleTipoIdentificacion(TipoIdentificacion).data, status=status.HTTP_200_OK)
 
     #===========================================
-    #ACTIVAR (PATCH /rol/{id}/)
+    #ACTIVAR (PATCH /TipoIdentidicacion/{id}/)
     #===========================================
     @extend_schema(request=None, responses={200: None})
     @action(detail=True, methods=["patch"])
     def Activar(self, request, pk=None):
         TipoIdentificacion = ServicioTipoIdentificacion.ObtenerTipoIdentificacionPorId(pk)
         ServicioTipoIdentificacion.ActivarTipoIdentificacion(TipoIdentificacion)
-        return Response({"Mensaje": "Rol Activado"}, status=status.HTTP_200_OK)
+        return Response({"Mensaje": "Tipo Identidicacion Activado"}, status=status.HTTP_200_OK)
 
     #===========================================
-    #ELIMINAR (DELETE /rol/{id}/)
+    #ELIMINAR (DELETE /TipoIdentidicacion/{id}/)
     #===========================================
     @extend_schema(request=None, responses={200: None})
     def destroy(self, request, pk=None):
         TipoIdentificacion = ServicioTipoIdentificacion.ObtenerTipoIdentificacionPorId(pk)
         ServicioTipoIdentificacion.EliminarTipoIdentificacion(TipoIdentificacion)
-        return Response({"Mensaje": "Rol Eliminado"}, status=status.HTTP_200_OK)
+        return Response({"Mensaje": "Tipo Identidicacion Eliminado"}, status=status.HTTP_200_OK)

@@ -4,6 +4,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 
 from APLICACION_USUARIOS.models import ModeloRolUsuario
+from APLICACION_USUARIOS.permissions import EsSuperAdministrador
 from APLICACION_USUARIOS.services.ServicioRolUsuario import ServicioRolUsuario
 from APLICACION_USUARIOS.serializers.read.RolUsuario import SerializadorListaRolUsuario, SerializadorDetalleRolUsuario
 
@@ -12,6 +13,8 @@ class VistasRolUsuario(
     mixins.RetrieveModelMixin,
     GenericViewSet
     ):
+
+    permission_classes = [EsSuperAdministrador]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -22,7 +25,7 @@ class VistasRolUsuario(
     queryset = ModeloRolUsuario.objects.all()
 
     #===========================================
-    #LISTAR (GET /rol/)
+    #LISTAR (GET /RolUsuario/)
     #===========================================
     def list(self, request):
         RolesUsuarios = ServicioRolUsuario.ObtenerRolesUsuarios()
@@ -30,7 +33,7 @@ class VistasRolUsuario(
         return Response(Serializador.data, status=status.HTTP_200_OK)
 
     #===========================================
-    #OBTENER (GET /rol/{id}/)
+    #OBTENER (GET /RolUsuario/{id}/)
     #===========================================
     def retrieve(self, request, pk=None):
         RolUsuario = ServicioRolUsuario.ObtenerRolUsuarioPorId(pk)
