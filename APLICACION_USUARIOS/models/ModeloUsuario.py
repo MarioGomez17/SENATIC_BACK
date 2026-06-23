@@ -35,3 +35,6 @@ class ModeloUsuario(AbstractBaseUser, PermissionsMixin, ModeloBase):
         return self.Nombre
 
     objects = UsuarioManager()
+
+    def TieneRol(self, Nombre_Rol: str) -> bool:
+        return self.RolesUsuario.filter(Rol__Nombre=Nombre_Rol, Estado=True).exists()
